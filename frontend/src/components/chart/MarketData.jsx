@@ -11,14 +11,12 @@ import {
 
 export const MarketData = () => {
   return (
-    <div className="w-full h-screen mt-5">
-      <div className="w-full h-2/3">
-        <h1 className="text-4xl mb-5">Stock Name</h1>
-        <div className="flex flex-col md:flex-row h-full space-y-5 md:space-y-0 md:space-x-5">
-          <Card className="w-full ">
+    <div className="w-full min-h-screen mt-5 flex flex-col">
+      <div className="flex-grow space-y-5">
+        <h1 className="text-4xl">Stock Name</h1>
+        <div className="flex flex-col md:flex-row space-y-5 md:space-y-0 md:space-x-5">
             <Chart />
-          </Card>
-          <div className="flex flex-col space-y-5">
+          <div className="w-full md:w-1/3 flex flex-col space-y-5">
             <Card>
               <div className="flex justify-around space-x-5 p-5 text-3xl">
                 <h1>STCK</h1>
@@ -32,30 +30,43 @@ export const MarketData = () => {
                 <h1>Sell</h1>
               </div>
             </Card>
-            <Card className="flex flex-col justify-between p-5 h-full font-medium">
-              <div className="flex justify-between">
+            <Card>
+              <div className="flex justify-between p-5">
                 <h1>Country</h1>
                 <h1>US</h1>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between p-5">
                 <h1>Exchange</h1>
                 <h1>NASDAQ</h1>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between p-5">
                 <h1>IPO Date</h1>
                 <h1>1-02-2005</h1>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between p-5">
                 <h1>Market Cap</h1>
                 <h1>1.5B</h1>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between p-5">
+                <h1>Profit</h1>
+                <h1>500M</h1>
+              </div>
+              <div className="flex justify-between p-5">
                 <h1>Industry</h1>
                 <h1>Technology</h1>
               </div>
             </Card>
           </div>
         </div>
+          <div className="p-5">
+          <h1 className="text-4xl">Information</h1>
+          <p className="text-lg mt-5">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam
+            deserunt blanditiis inventore qui earum eum, dolor necessitatibus ut
+            distinctio vitae nemo eos? Accusamus obcaecati sint a distinctio
+            modi sapiente laudantium!
+          </p>
+          </div>
       </div>
     </div>
   );
