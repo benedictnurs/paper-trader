@@ -23,7 +23,6 @@ def get_stocks():
         # Open and read the file
         with open(file_path, 'r') as file:
             stocks = json.load(file)
-            print(f"Stocks data: {stocks}")
         return jsonify(stocks)
     except Exception as e:
         print(f"Error reading file: {e}")
