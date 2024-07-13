@@ -36,7 +36,7 @@ export function SearchBar({ onSelect }) {
         setStocks(data);
 
         // Set the initial stock to the first item in the fetched data
-        if (data.length > 0) {
+        if (data.length > 0 && !value) {
           const initialStock = data[0];
           setValue(`${initialStock.value},${initialStock.label}`);
           onSelect(initialStock.value, initialStock.label);
@@ -47,7 +47,7 @@ export function SearchBar({ onSelect }) {
     };
 
     fetchStocks();
-  }, [onSelect]);
+  }, [value, onSelect]);
 
   const handleSelect = (currentValue) => {
     const [ticker, name] = currentValue.split(',');

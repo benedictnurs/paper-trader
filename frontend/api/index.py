@@ -11,15 +11,13 @@ CORS(app)  # Enable CORS for all routes
 def get_stocks():
     try:
         # Ensure the current working directory is logged
-        print(f"Current working directory: {os.getcwd()}")
 
         # Adjust the file path to the correct location of stocks.json
         file_path = os.path.join(os.getcwd(), 'api', 'stocks.json')
-        print(f"Reading from file: {file_path}")
+
 
         # Check if the file exists
         if not os.path.exists(file_path):
-            print(f"File does not exist: {file_path}")
             return jsonify({"error": f"File does not exist: {file_path}"}), 500
 
         # Open and read the file
