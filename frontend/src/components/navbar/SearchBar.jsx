@@ -71,7 +71,9 @@ export function SearchBar({ onSelect }) {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value ? value.split(',')[1] : "Select a stock..."}
+          <span className="truncate">
+            {value ? value.split(',')[1] : "Select a stock..."}
+          </span>
           <CaretDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -93,7 +95,9 @@ export function SearchBar({ onSelect }) {
                     onSelect={() => handleSelect(`${stock.value},${stock.label}`)}
                     aria-selected={value.split(',')[0] === stock.value ? "true" : "false"}
                   >
-                    {stock.label}
+                    <span className="truncate">
+                      {stock.label}
+                    </span>
                     <CheckIcon
                       className={cn(
                         "ml-auto h-4 w-4",
