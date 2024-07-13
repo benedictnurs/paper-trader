@@ -6,29 +6,46 @@ import {
 import { Card } from "@/components/ui/card";
 import { useTheme } from "next-themes"; // assuming useTheme hook from next-themes
 
-export const Chart = () => {
+export const Chart = ({ ticker, onDetailsChange }) => {
   const { theme } = useTheme();
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Correctly fetch and parse the data from the /api endpoint
-    fetch('/api')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(jsonData => {
-        // jsonData contains the data in the format
+    if (!ticker) return;
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ticker }),
+        });
+        if (!response.ok) throw new Error('Network response was not ok');
+        const jsonData = await response.json();
+
         const chartData = Object.entries(jsonData).map(([date, values]) => ({
           date: date,
           price: values.Close
         }));
         setData(chartData);
-      })
-      .catch(error => console.error('Failed to load data:', error));
-  }, []);
+
+        const latestPrice = chartData.length ? chartData[chartData.length - 1].price : 0;
+        const previousPrice = chartData.length > 1 ? chartData[chartData.length - 2].price : latestPrice;
+        const change = previousPrice ? ((latestPrice - previousPrice) / previousPrice) * 100 : 0;
+
+        onDetailsChange({
+          price: latestPrice.toFixed(2),
+          change: change.toFixed(2)
+        });
+      } catch (error) {
+        console.error('Failed to load data:', error);
+      }
+    };
+
+    fetchData();
+  }, [ticker]);
 
   if (!data.length) return <p>Loading data...</p>;
 
@@ -66,7 +83,7 @@ export const Chart = () => {
                 fill: textColor,
               }}
               tickLine={false}
-              tickFormatter={(value) => (Math.round(value * 100) / 100).toFixed(2)}  // Rounding to the nearest hundredth
+              tickFormatter={(value) => value.toFixed(2)}
               domain={['dataMin', 'dataMax']}
               axisLine={false}
             />

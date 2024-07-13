@@ -1,7 +1,7 @@
-"use client";
+"use client"; // This directive makes the component client-side
+
 import * as React from "react";
 import { CaretDownIcon, CheckIcon } from "@radix-ui/react-icons";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,31 +13,48 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+  Popover, PopoverContent, PopoverTrigger
 } from "@/components/ui/popover";
 
-const stocks = [
-  { value: "AAPL", label: "Apple Inc." },
-  { value: "MSFT", label: "Microsoft Corporation" },
-  { value: "GOOGL", label: "Alphabet Inc." },
-  { value: "AMZN", label: "Amazon.com Inc." },
-  { value: "FB", label: "Meta Platforms, Inc." },
-  { value: "TSLA", label: "Tesla Inc." },
-];
-
-export function SearchBar() {
+export function SearchBar({ onSelect }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
   const [search, setSearch] = React.useState("");
+  const [stocks, setStocks] = React.useState([]);
+
+  React.useEffect(() => {
+    // Fetch stocks from the API route
+    const fetchStocks = async () => {
+      try {
+        console.log('Fetching stocks...');
+        const response = await fetch('/api/stocks'); // Adjust to your Flask API URL
+        if (!response.ok) {
+          throw new Error('Failed to fetch stocks');
+        }
+        const data = await response.json();
+        console.log('Stocks data:', data);
+        setStocks(data);
+
+        // Set the initial stock to the first item in the fetched data
+        if (data.length > 0) {
+          const initialStock = data[0];
+          setValue(`${initialStock.value},${initialStock.label}`);
+          onSelect(initialStock.value, initialStock.label);
+        }
+      } catch (error) {
+        console.error('Error fetching stocks:', error);
+      }
+    };
+
+    fetchStocks();
+  }, [onSelect]);
 
   const handleSelect = (currentValue) => {
-    const ticker = currentValue.split(',')[0]; // Extract the ticker
-    console.log(ticker); // Log the ticker to the console
+    const [ticker, name] = currentValue.split(',');
     setValue(currentValue);
-    setSearch(""); // Reset the search input
+    setSearch("");
     setOpen(false);
+    onSelect(ticker, name);
   };
 
   const filteredStocks = stocks.filter(stock =>
@@ -63,7 +80,7 @@ export function SearchBar() {
           <CommandInput
             placeholder="Search stocks..."
             className="h-9"
-            value={search} // Control the input to reset it
+            value={search}
             onInput={(e) => setSearch(e.target.value)}
           />
           {filteredStocks.length > 0 ? (
@@ -72,7 +89,7 @@ export function SearchBar() {
                 {filteredStocks.map((stock) => (
                   <CommandItem
                     key={stock.value}
-                    value={`${stock.value},${stock.label}`} // Store both ticker and name
+                    value={`${stock.value},${stock.label}`}
                     onSelect={() => handleSelect(`${stock.value},${stock.label}`)}
                     aria-selected={value.split(',')[0] === stock.value ? "true" : "false"}
                   >

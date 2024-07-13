@@ -1,38 +1,47 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import yfinance as yf
-from yahoo_fin import stock_info as si
+import os
+import json
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-@app.route("/api", methods=["GET", "POST"])  # Accept GET and POST requests
+@app.route("/api/stocks", methods=["GET"])
+def get_stocks():
+    try:
+        # Ensure the current working directory is logged
+        print(f"Current working directory: {os.getcwd()}")
+
+        # Adjust the file path to the correct location of stocks.json
+        file_path = os.path.join(os.getcwd(), 'api', 'stocks.json')
+        print(f"Reading from file: {file_path}")
+
+        # Check if the file exists
+        if not os.path.exists(file_path):
+            print(f"File does not exist: {file_path}")
+            return jsonify({"error": f"File does not exist: {file_path}"}), 500
+
+        # Open and read the file
+        with open(file_path, 'r') as file:
+            stocks = json.load(file)
+            print(f"Stocks data: {stocks}")
+        return jsonify(stocks)
+    except Exception as e:
+        print(f"Error reading file: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api", methods=["POST"])
 def get_stock_data():
-    if request.method == "POST":
-        data = request.json
+    data = request.json
+    if not data or 'ticker' not in data:
+        return jsonify({"error": "No ticker provided"}), 400
 
-        if not data or 'ticker' not in data:
-            return jsonify({"error": "No ticker provided"}), 400
-
-        ticker = data.get('ticker', 'MSFT')  # Default to MSFT if no ticker provided
-    else:
-        ticker = 'AAPL'  # Default ticker for GET request
-
-    # Create a Ticker object for the provided ticker
+    ticker = data.get('ticker')
     stock = yf.Ticker(ticker)
-
-    # Fetch the full historical data on a monthly basis
     hist = stock.history(period="max", interval="1mo")
-
-    # Format the index to 'YYYY-MM-DD' format by converting it to strings
     hist.index = hist.index.strftime('%Y-%m-%d')
-
-    # Convert the DataFrame to a dictionary
     hist_dict = hist.to_dict(orient="index")
-
-    # Debugging: Print the formatted data
-
-    # Return the formatted JSON data
     return jsonify(hist_dict)
 
 if __name__ == '__main__':
