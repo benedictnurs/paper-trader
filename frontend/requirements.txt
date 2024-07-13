@@ -1,3 +1,4 @@
 Flask==2.2.2
 yfinance
 setuptools
+Werkzeug==2.2.2
