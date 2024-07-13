@@ -9,7 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "pip install --upgrade pip setuptools"
+    "postinstall": "apt-get update && apt-get install -y python3-distutils && pip install --upgrade pip setuptools"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.1",
