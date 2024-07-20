@@ -1,0 +1,28 @@
+{
+    "builds": [
+      {
+        "src": "frontend/app.py",
+        "use": "@vercel/python",
+        "config": {
+          "includeFiles": [
+            "frontend/app.py",
+            "frontend/requirements.txt",
+            "frontend/api/**",
+            "frontend/*.json"
+          ],
+          "buildCommand": "apt-get update && apt-get install -y python3-distutils && pip install --upgrade pip setuptools && pip install -r requirements.txt"
+        }
+      },
+      {
+        "src": "next.config.js",
+        "use": "@vercel/next"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "frontend/app.py"
+      }
+    ]
+  }
+  
