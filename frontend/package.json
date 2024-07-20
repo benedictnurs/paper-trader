@@ -5,11 +5,10 @@
   "scripts": {
     "flask-dev": "FLASK_DEBUG=1 pip3 install -r requirements.txt && python3 -m flask --app api/index run -p 5328",
     "next-dev": "next dev",
-    "dev": "concurrently \"npm run next-dev\" \"npm run flask-dev\"",
-    "build": "rm -rf .next && next build",
+    "dev": "concurrently \"pnpm run next-dev\" \"pnpm run flask-dev\"",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "deploy": "vc build && vc deploy --prebuilt"
+    "lint": "next lint"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.1",
@@ -29,7 +28,7 @@
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
     "lucide-react": "^0.399.0",
-    "next": "^14.2.4",
+    "next": "14.2.4",
     "next-themes": "^0.3.0",
     "postcss": "8.4.23",
     "react": "^18",
@@ -39,8 +38,7 @@
     "tailwindcss": "3.3.2",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.0.4"
-  },
-  "engines": {
+  },  "engines": {
     "node": "18.x"
   }
 }
