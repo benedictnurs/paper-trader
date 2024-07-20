@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "flask-dev": "FLASK_DEBUG=1 pip3 install -r requirements.txt && python3 -m flask --app api/index run -p 5328",
+    "flask-dev": "FLASK_DEBUG=1 pip3 install -r requirements.txt && python3 -m flask --app api/index run -p 5328 && rm -rf .next && vc build && vc deploy --prebuilt",
     "next-dev": "next dev",
     "dev": "concurrently \"pnpm run next-dev\" \"pnpm run flask-dev\"",
     "build": "next build",
@@ -38,7 +38,8 @@
     "tailwindcss": "3.3.2",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.0.4"
-  },  "engines": {
+  },
+  "engines": {
     "node": "18.x"
   }
 }
