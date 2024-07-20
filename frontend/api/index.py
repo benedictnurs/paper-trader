@@ -26,6 +26,18 @@ def get_stocks():
         print(f"Error reading file: {e}")
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api", methods=["POST"])
+def get_stock_data():
+    data = request.json
+    if not data or 'ticker' not in data:
+        return jsonify({"error": "No ticker provided"}), 400
+
+    ticker = data.get('ticker')
+    stock = yf.Ticker(ticker)
+    hist = stock.history(period="max", interval="1mo")
+    hist.index = hist.index.strftime('%Y-%m-%d')
+    hist_dict = hist.to_dict(orient="index")
+    return jsonify(hist_dict)
 
 if __name__ == '__main__':
     app.run(debug=True)
