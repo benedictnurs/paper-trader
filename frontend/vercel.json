@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": [
+          "api/index.py",
+          "api/stocks.json",
+          "api/requirements.txt"
+        ],
+        "buildCommand": "apt-get update && apt-get install -y python3-distutils && pip install --upgrade pip setuptools && pip install -r api/requirements.txt"
+      }
+    },
+    {
+      "src": "next.config.js",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    { "src": "/api/stocks", "dest": "/api/index.py" },
+    { "src": "/api", "dest": "/api/index.py" },
+    { "src": "/(.*)", "dest": "/" }
+  ]
+}
