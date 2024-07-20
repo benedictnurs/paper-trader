@@ -1,8 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer
-} from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from "@/components/ui/card";
 import { useTheme } from "next-themes"; // assuming useTheme hook from next-themes
 
@@ -15,6 +13,7 @@ export const Chart = ({ ticker, onDetailsChange }) => {
 
     const fetchData = async () => {
       try {
+        console.log('Fetching stock data for ticker:', ticker);
         const response = await fetch('/api', {
           method: 'POST',
           headers: {
@@ -22,8 +21,11 @@ export const Chart = ({ ticker, onDetailsChange }) => {
           },
           body: JSON.stringify({ ticker }),
         });
+
         if (!response.ok) throw new Error('Network response was not ok');
+
         const jsonData = await response.json();
+        console.log('Received JSON data from API:', jsonData);
 
         const chartData = Object.entries(jsonData).map(([date, values]) => ({
           date: date,
